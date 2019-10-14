@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class CarServiceImplementation implements CarService {
 
     private List<Car> carList;
-    
+
     public CarServiceImplementation() {
         carList = new ArrayList<>();
         carList.add(new Car(1L, "Mercedes", "GLC 300", Color.NAVY_BLUE));
@@ -31,7 +31,7 @@ public class CarServiceImplementation implements CarService {
 
     @Override
     public Optional<Car> getCarById(long id) {
-        return carList.stream().filter(car -> car.getId() == id).findFirst();
+        return carList.stream().filter(car -> car.getCarId() == id).findFirst();
     }
 
     @Override
@@ -42,30 +42,27 @@ public class CarServiceImplementation implements CarService {
 
     @Override
     public boolean addCar(Car car) {
-        carList.add(car);
-        return true;
+        return carList.add(car);
     }
 
     @Override
     public boolean updateAllFieldsForCar(Car updateCar) {
-        Optional<Car> found = carList.stream().filter(car -> car.getId() == updateCar.getId()).findFirst();
+        Optional<Car> found = carList.stream().filter(car -> car.getCarId() == updateCar.getCarId()).findFirst();
 
-        if(found.isPresent()) {
+        if (found.isPresent()) {
             carList.remove(found.get());
-            carList.add(updateCar);
-            return true;
+            return carList.add(updateCar);
         }
         return false;
     }
 
     @Override
-    public boolean modifyChoiceFieldCar(long id, Car modifiedCar) {
-        Optional<Car> carOptional = carList.stream().filter(car -> car.getId() == id).findFirst();
+    public boolean modifyChoiceFieldCar(long id, String brand) {
+        Optional<Car> carOptional = carList.stream().filter(car -> car.getCarId() == id).findFirst();
 
-        if(carOptional.isPresent()) {
-            carOptional.get().setBrand(modifiedCar.getBrand());
-            carOptional.get().setModel(modifiedCar.getModel());
-            carOptional.get().setColor(modifiedCar.getColor());
+        if (carOptional.isPresent()) {
+            carOptional.get().setBrand(brand);
+
             return true;
         }
         return false;
@@ -73,9 +70,14 @@ public class CarServiceImplementation implements CarService {
 
     @Override
     public boolean deleteCar(long id) {
-        Optional<Car> found = carList.stream().filter(car -> car.getId() == id).findFirst();
+        Optional<Car> found = carList.stream().filter(car -> car.getCarId()== id).findFirst();
 
-        found.ifPresent(car -> carList.remove(car));
-        return true;
+            if(found.isPresent()) {
+                carList.remove(found.get());
+
+                return true;
+            } else {
+                return false;
+            }
     }
 }

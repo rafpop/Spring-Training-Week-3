@@ -1,16 +1,20 @@
 package pl.mukova.cars.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.mukova.cars.model.Car;
-import pl.mukova.cars.model.Color;
 import pl.mukova.cars.service.CarService;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(value = "/cars", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -24,23 +28,31 @@ public class CarController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Car>> getAllCars() {
-        return new ResponseEntity<>(carService.getAllCars(), HttpStatus.OK);
+    public ResponseEntity<Resources<Car>> getAllCars() {
+        List<Car> carList = carService.getAllCars();
+        carList.forEach(car -> car.add(linkTo(CarController.class).slash(car.getCarId()).withSelfRel()));
+        Link link = linkTo(CarController.class).withSelfRel();
+        Resources<Car> carResources = new Resources<>(carList, link);
+        return new ResponseEntity<>(carResources, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Car> getCarById(@PathVariable long id) {
+    public ResponseEntity<Resource<Car>> getCarById(@PathVariable long id) {
         Optional<Car> carById = carService.getCarById(id);
-
-        return carById.map(car -> new ResponseEntity<>(car, HttpStatus.OK)).orElseGet(() ->
+        Link link = linkTo(CarController.class).slash(id).withSelfRel();
+        Resource<Car> carResource = new Resource<>(carById.get(), link);
+        return carById.map(car -> new ResponseEntity<>(carResource, HttpStatus.OK)).orElseGet(() ->
                 new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/color/{color}")
-    public ResponseEntity<List<Car>> getCarByColor(@PathVariable String color) {
+    public ResponseEntity<Resources<Car>> getCarByColor(@PathVariable String color) {
         List<Car> carList = carService.getCarsByColor(color);
+        carList.forEach(car -> car.add(linkTo(CarController.class).withRel("allColors")));
+        Link link = linkTo(CarController.class).withSelfRel();
+        Resources<Car> carResources = new Resources<>(carList, link);
         if (!carList.isEmpty()) {
-           return new ResponseEntity<>(carList, HttpStatus.OK);
+           return new ResponseEntity<>(carResources, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -64,9 +76,9 @@ public class CarController {
 
     @PatchMapping("/{id}")
     public ResponseEntity updateSomeFieldsInChoiceCar(@PathVariable long id,
-                                                           @RequestBody Car modifiedCar) {
+                                                      @RequestParam String brand) {
 
-        if(carService.modifyChoiceFieldCar(id, modifiedCar)) {
+        if(carService.modifyChoiceFieldCar(id, brand)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
