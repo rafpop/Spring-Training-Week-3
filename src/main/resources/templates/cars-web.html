@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page - carList manipulation and car list view</title>
+
+    <style>
+        body {
+            background-color: aqua;
+        }
+
+    </style>
+</head>
+<body>
+<br>
+<h2>CAR APPLICATION</h2>
+
+<table>
+    <tr th:each="car : ${carList}">
+        <td th:text="${car.getBrand()}"> </td>
+        <td th:text="${car.getModel()}"> </td>
+        <td th:text="${car.getColor()}"> </td>
+    </tr>
+</table>
+
+<p>Choose ID of Car in order to show</p>
+<form th:action="@{/cars-web/findCarById}" th:object="${readId}" method="get">
+    <p>Id:</p>
+    <select name="id">
+        <option th:each="id : ${readId}"
+                th:value="${id}" th:text="${id}"></option>
+    </select>
+    <input th:type="submit" value="Show Car By Id"/>
+</form>
+
+<form th:action="@{/cars-web/addCar}" th:object="${addCar}" method="post">
+    <p>Brand: <input type="text" placeholder="Brand" th:field="*{brand}"></p>
+    <p>Model: <input type="text" placeholder="Model" th:field="*{model}"></p>
+    <p>Color: <select th:field="*{color}">
+        <option th:each="colors : ${color}" th:value="${colors}" th:text="${colors.getColor()}"></option>
+    </select></p>
+    <p><input th:type="submit" value="Add Car To List"></p>
+</form>
+
+<form th:action="@{/cars-web/modifyCar}" th:object="${modifyCar}" method="post">
+<p>Id: <input type="text" th:field="*{id}"></p>
+    <p>Brand: <input type="text" th:field="*{brand}"></p>
+    <p>Model: <input type="text" th:field="*{model}"></p>
+    <p>Color: <input type="text" th:field="*{color}"></p>
+    <p><input th:type="submit" value="Modify Car"></p>
+</form>
+
+<form th:action="@{/cars-web/deleteCar}" th:object="${readId}" method="get">
+    <p>Id:<select>
+        <option th:each="id : ${readId}"
+                th:value="${id}" th:text="${id}"></option>
+    </select></p>
+    <p><input type="submit" value="Delete Car From List"></p>
+</form>
+
+</body>
+</html>

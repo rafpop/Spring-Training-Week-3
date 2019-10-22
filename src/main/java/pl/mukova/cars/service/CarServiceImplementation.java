@@ -4,15 +4,15 @@ import org.springframework.stereotype.Service;
 import pl.mukova.cars.model.Car;
 import pl.mukova.cars.model.Color;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class CarServiceImplementation implements CarService {
 
     private List<Car> carList;
+    private List<Long> idList;
+    private List<Color> colorList;
 
     public CarServiceImplementation() {
         carList = new ArrayList<>();
@@ -22,6 +22,8 @@ public class CarServiceImplementation implements CarService {
         carList.add(new Car(4L, "Mercedes", "EQC", Color.BLUE));
         carList.add(new Car(5L, "Ferrari", "California", Color.BLACK));
         carList.add(new Car(6L, "Bugatti", "La Voiture Noire", Color.WHITE));
+        this.idList = new ArrayList<>();
+        this.colorList = Arrays.asList(Color.values());
     }
 
     @Override
@@ -41,8 +43,14 @@ public class CarServiceImplementation implements CarService {
     }
 
     @Override
-    public boolean addCar(Car car) {
-        return carList.add(car);
+    public boolean addCar(Car newCar) {
+
+        if(newCar != null) {
+            long id = setNewIdForCar();
+            newCar.setCarId(id);
+            return carList.add(newCar);
+        }
+        return false;
     }
 
     @Override
@@ -72,12 +80,32 @@ public class CarServiceImplementation implements CarService {
     public boolean deleteCar(long id) {
         Optional<Car> found = carList.stream().filter(car -> car.getCarId()== id).findFirst();
 
-            if(found.isPresent()) {
-                carList.remove(found.get());
-
-                return true;
-            } else {
-                return false;
-            }
+        return carList.remove(found.get());
     }
+
+    @Override
+    public List<Long> getListId() {
+        idList.removeAll(idList);
+
+        for (Car car: carList) {
+            idList.add(car.getCarId());
+        }
+        return idList;
+    }
+
+    @Override
+    public List<Color> getAllCarColors() {
+        return colorList;
+    }
+
+    @Override
+    public long setNewIdForCar() {
+        List<Long> idListForSet = carList.stream().map(Car::getCarId).sorted().collect(Collectors.toList());
+
+        if (idListForSet.size() > 0) {
+            return idListForSet.get(idListForSet.size() -1) + 1;
+        }
+        return 0;
+    }
+
 }

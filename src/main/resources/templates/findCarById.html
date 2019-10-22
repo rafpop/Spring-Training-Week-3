@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Color</th>
+
+    </tr>
+
+    <tr th:object="${foundCar}">
+        You've found Car by Id: <p th:text="${foundCar.get().getCarId()}"></p>
+        <td th:text="${foundCar.get().getBrand()}">Brand</td>
+        <td th:text="${foundCar.get().getModel()}">Model</td>
+        <td th:text="${foundCar.get().getColor()}">Colour</td>
+    </tr>
+</table>
+<strong><a href="/cars">Click here to go back</a></strong>
+</body>
+</html>

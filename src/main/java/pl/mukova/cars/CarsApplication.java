@@ -26,7 +26,11 @@ public class CarsApplication {
                 .build();
     }
 
-    /*Zadanie podstawowe:
+    /*
+
+    Tydzień 3
+
+    Zadanie podstawowe:
 Napisz REST API dla listy pojazdów. Pojazd będzie miał pola: id, mark, model, color.
 API które będzie obsługiwało metody webowe:
 
@@ -48,5 +52,15 @@ Dla ambitnych:
     dodaj obsługę Swgger UI
     zaimplementuj HATEOAS
 
-     */
+Tydzień 4:
+
+    Rozbuduj swoją aplikacje z poprzedniego tygodnia o interfejs graficzny, który umożliwi:
+
+    wyświetlanie wszystkich pozycji
+    pobieranie elementu po jego id
+    dodawanie pozycji
+    modyfikowanie pozycji
+    modyfikowanie jednego z pól pozycji
+    usuwania jednej pozycji */
+
 }
