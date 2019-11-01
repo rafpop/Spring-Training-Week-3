@@ -28,6 +28,7 @@ public class CarGui {
         model.addAttribute("color", carService.getAllCarColors());
         model.addAttribute("id", "");
         model.addAttribute("modifyCar", new Car());
+        model.addAttribute("modifyBrand", new Car());
         return "cars-web";
     }
 
@@ -47,7 +48,13 @@ public class CarGui {
     @PostMapping("/cars-web/modifyCar")
     public String modifyCar(@ModelAttribute Car updateCar) {
         carService.updateAllFieldsForCar(updateCar);
-        return "cars-web";
+        return "redirect:/cars-web";
+    }
+
+    @PostMapping("/cars-web/modifyBrand")
+    public String modifyBrandCar(@ModelAttribute Car car) {
+    carService.modifyChoiceFieldCar(car.getCarId(), car.getBrand());
+    return "redirect:/cars-web";
     }
 
     @GetMapping(value = "/cars-web/deleteCar", params = "id")
@@ -55,5 +62,7 @@ public class CarGui {
         carService.deleteCar(id);
         return "redirect:/cars-web";
     }
+
+
 
 }

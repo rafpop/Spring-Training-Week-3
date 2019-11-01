@@ -18,6 +18,7 @@
 
 <table>
     <tr th:each="car : ${carList}">
+        <td th:text="${car.getCarId()}"> </td>
         <td th:text="${car.getBrand()}"> </td>
         <td th:text="${car.getModel()}"> </td>
         <td th:text="${car.getColor()}"> </td>
@@ -44,17 +45,31 @@
 </form>
 
 <form th:action="@{/cars-web/modifyCar}" th:object="${modifyCar}" method="post">
-<p>Id: <input type="text" th:field="*{id}"></p>
+<p>Id: <select name="id">
+    <option th:each="car : ${carList}"
+            th:value="${car.getCarId()}" th:text="${car.getCarId()}"></option>
+</select></p>
     <p>Brand: <input type="text" th:field="*{brand}"></p>
     <p>Model: <input type="text" th:field="*{model}"></p>
-    <p>Color: <input type="text" th:field="*{color}"></p>
-    <p><input th:type="submit" value="Modify Car"></p>
+    <p>Color: <select th:field="*{color}">
+        <option th:each="colors : ${color}" th:value="${colors}" th:text="${colors.getColor()}"></option>
+    </select></p>
+    <p><input type="submit" value="Modify Car"></p>
 </form>
 
-<form th:action="@{/cars-web/deleteCar}" th:object="${readId}" method="get">
-    <p>Id:<select>
-        <option th:each="id : ${readId}"
-                th:value="${id}" th:text="${id}"></option>
+<form th:action="@{/cars-web/modifyBrand}" th:object="${modifyBrand}" method="post">
+    <p>Id: <select name="id">
+        <option th:each="car : ${carList}"
+                th:value="${car.getCarId()}" th:text="${car.getCarId()}"></option>
+    </select></p>
+    <p>Brand: <input type="text" th:field="*{brand}"></p>
+    <p><input type="submit" value="Modify Brand Car"></p>
+</form>
+
+<form th:action="@{/cars-web/deleteCar}" th:object="${readId}" th:method="get">
+    <p>Id:<select name="id">
+        <option th:each="car : ${carList}"
+                th:value="${car.getCarId()}" th:text="${car.getCarId()}"></option>
     </select></p>
     <p><input type="submit" value="Delete Car From List"></p>
 </form>

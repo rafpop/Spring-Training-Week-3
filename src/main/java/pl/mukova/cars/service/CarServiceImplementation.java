@@ -85,7 +85,7 @@ public class CarServiceImplementation implements CarService {
 
     @Override
     public List<Long> getListId() {
-        idList.removeAll(idList);
+        idList.clear();
 
         for (Car car: carList) {
             idList.add(car.getCarId());
