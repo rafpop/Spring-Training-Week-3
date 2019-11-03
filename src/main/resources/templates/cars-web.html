@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css" rel="stylesheet">
+    <title>Main page - carList manipulation and car list view</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            align-items: center;
+            justify-items: center;
+            margin: 0 auto;
+        }
+
+        body {
+            background-color: #6966ff;
+        }
+
+        table {
+            border: 2px solid black;
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        th, td, tr {
+            border: 1px dotted darkgreen;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        tr:nth-child(odd) {
+            background: #4970ee;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        input {
+            margin: 0 auto;
+        }
+
+        #spacer-top {
+            padding-top: 20px;
+            padding-bottom: 20px
+        }
+
+        .btn-primary.custom-btn {
+            background-color: #990700;
+            border-color: #000;
+        }
+
+    </style>
+</head>
+<body>
+<br>
+<div class="container">
+    <div class="row" id="spacer-top"></div>
+    <div class="col-12">
+        <h2 class="font-italic">CAR WEB APPLICATION</h2>
+    </div>
+    <div class="row">
+        <div class="col-12" style="text-align: center">
+            <br>
+            <table>
+                <thead class="thead-dark">
+                <tr style="background-color: darkred">
+                    <th scope="col">ID</th>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Color</th>
+                </tr>
+                </thead>
+                <tr th:each="car : ${carList}">
+                    <td th:text="${car.getCarId()}"></td>
+                    <td th:text="${car.getBrand()}"></td>
+                    <td th:text="${car.getModel()}"></td>
+                    <td th:text="${car.getColor()}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <br>
+            <br>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card border-dark" style="max-width: 18rem; background-color: #4970ee; border: 2px solid">
+                <div class="card-header text-white"
+                     style="background-color: #4970ee; text-decoration-color: aliceblue; text-align: center">
+                    Choose Car ID to show
+                </div>
+                <div class="card-body text-light">
+                    <form th:action="@{/cars-web/findCarById}" th:object="${readId}" method="get">
+                        <p>Id:
+                            <select class="custom-select" name="id">
+                                <option th:each="id : ${readId}"
+                                        th:value="${id}" th:text="${id}"></option>
+                            </select></p>
+                        <input class="btn btn-primary custom-btn" th:type="submit" value="Show Car By Id"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-dark" style="max-width: 18rem; background-color: #4970ee; border: 2px solid">
+                <div class="card-header text-white"
+                     style="background-color: #4970ee; text-decoration-color: aliceblue; text-align: center">
+                    Add new Car
+                </div>
+                <div class="card-body text-light">
+                    <form th:action="@{/cars-web/addCar}" th:object="${addCar}" method="post">
+                        <p>Brand: <input class="form-control" type="text" placeholder="Brand" th:field="*{brand}"></p>
+                        <p>Model: <input class="form-control" type="text" placeholder="Model" th:field="*{model}"></p>
+                        <p>Color: <select class="custom-select" th:field="*{color}">
+                            <option th:each="colors : ${color}" th:value="${colors}"
+                                    th:text="${colors.getColor()}"></option>
+                        </select></p>
+                        <p><input class="btn btn-primary custom-btn" th:type="submit" value="Add Car To List"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-dark" style="max-width: 18rem; background-color: #4970ee; border: 2px solid">
+                <div class="card-header text-white"
+                     style="background-color: #4970ee; text-decoration-color: aliceblue; text-align: center">
+                    Modify all fields of the selected vehicle
+                </div>
+                <div class="card-body text-light">
+                    <form th:action="@{/cars-web/modifyCar}" th:object="${modifyCar}" method="post">
+                        <p>Id: <select class="custom-select" name="id2" th:field="*{carId}">
+                            <option th:each="id : ${readId}"
+                                    th:value="${id}" th:text="${id}"></option>
+                        </select></p>
+                        <p>Brand: <input class="form-control" type="text" th:field="*{brand}"></p>
+                        <p>Model: <input class="form-control" type="text" th:field="*{model}"></p>
+                        <p>Color: <select class="custom-select" th:field="*{color}">
+                            <option th:each="colors : ${color}" th:value="${colors}"
+                                    th:text="${colors.getColor()}"></option>
+                        </select></p>
+                        <p><input class="btn btn-primary custom-btn" type="submit" value="Modify Car"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-dark" style="max-width: 18rem; background-color: #4970ee; border: 2px solid">
+                <div class="card-header text-white"
+                     style="background-color: #4970ee; text-decoration-color: aliceblue; text-align: center">
+                    Modify brand of the selected vehicle
+                </div>
+                <div class="card-body text-light">
+                    <form th:action="@{/cars-web/modifyBrand}" th:object="${modifyBrand}" method="post">
+                        <p>Id: <select class="custom-select" name="id3" th:field="*{carId}">
+                            <option th:each="car : ${carList}"
+                                    th:value="${car.getCarId()}" th:text="${car.getCarId()}"></option>
+                        </select></p>
+                        <p>Brand: <input class="form-control" type="text" th:field="*{brand}"></p>
+                        <p><input class="btn btn-primary custom-btn" type="submit" value="Modify Brand Car"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <br>
+            <br>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col" style="text-align: center">
+            <div class="card border-dark" style="max-width: 18rem; background-color: #4970ee; border: 2px solid">
+                <div class="card-header text-white"
+                     style="background-color: #4970ee; text-decoration-color: aliceblue; text-align: center">
+                    Delete Car
+                </div>
+                <div class="card-body text-light">
+                    <form th:action="@{/cars-web/deleteCar}" th:object="${readId}" th:method="get">
+                        <p>Id:<select class="custom-select" name="id">
+                            <option th:each="car : ${carList}"
+                                    th:value="${car.getCarId()}" th:text="${car.getCarId()}"></option>
+                        </select></p>
+                        <p><input class="btn btn-primary custom-btn" type="submit" value="Delete Car From List"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <br><br>
+            <p style="font-size: 16px">
+                <ins>Created from <img src="../static/images/heart-clipart-gif-7.gif" alt="heart"
+                                       th:src="@{images/heart-clipart-gif-7.gif}" width="30"> by junior ninja - Rafał
+                    Popielski
+                </ins>
+            </p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

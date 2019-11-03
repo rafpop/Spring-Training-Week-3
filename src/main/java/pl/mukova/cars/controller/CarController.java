@@ -37,7 +37,7 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Resource<Car>> getCarById(@PathVariable long id) {
+    public ResponseEntity<Resource<Car>> getCarById(@PathVariable Long id) {
         Optional<Car> carById = carService.getCarById(id);
         Link link = linkTo(CarController.class).slash(id).withSelfRel();
         Resource<Car> carResource = new Resource<>(carById.get(), link);
