@@ -54,12 +54,14 @@ public class CarServiceImplementation implements CarService {
     }
 
     @Override
-    public boolean updateAllFieldsForCar(Car updateCar) {
-        Optional<Car> found = carList.stream().filter(car -> car.getCarId() == updateCar.getCarId()).findFirst();
+    public boolean updateAllFieldsForCar(Car car) {
+        Optional<Car> found = carList.stream().filter(car1 -> car1.getCarId() == car.getCarId()).findFirst();
 
         if (found.isPresent()) {
             carList.remove(found.get());
-            return carList.add(updateCar);
+            carList.add(car);
+            carList.sort(Comparator.comparing(Car::getCarId));
+            return true;
         }
         return false;
     }
@@ -69,7 +71,7 @@ public class CarServiceImplementation implements CarService {
         Optional<Car> carOptional = carList.stream().filter(car -> car.getCarId() == id).findFirst();
 
         if (carOptional.isPresent()) {
-            carOptional.get().setBrand(brand);
+           carOptional.get().setBrand(brand);
 
             return true;
         }

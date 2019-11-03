@@ -13,7 +13,7 @@ List<Car> getAllCars();
 Optional<Car> getCarById(long id);
 List<Car> getCarsByColor(String color);
 boolean addCar(Car car);
-boolean updateAllFieldsForCar(Car updateCar);
+boolean updateAllFieldsForCar(Car car);
 boolean modifyChoiceFieldCar(long id, String brand);
 boolean deleteCar(long id);
 List<Long> getListId();

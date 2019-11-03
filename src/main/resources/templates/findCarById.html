@@ -2,25 +2,102 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css" rel="stylesheet">
     <title>Title</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            align-items: center;
+            justify-items: center;
+            margin: 0 auto;
+        }
+
+        body {
+            background-color: #6966ff;
+        }
+
+        table {
+            border: 2px solid black;
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        th, td, tr {
+            border: 1px dotted darkgreen;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        input {
+            margin: 0 auto;
+        }
+
+        #spacer-top {
+            padding-top: 20px;
+            padding-bottom: 20px
+        }
+
+        .btn-primary.custom-btn {
+            background-color: #990700;
+            border-color: #000;
+        }
+
+    </style>
+
 </head>
 <body>
-<table border="1">
-    <tr>
+<br>
+<div class="container">
+    <div class="row" id="spacer-top">
+        <div class="col-12">
+            <h2>You've found Car by Id:</h2>
+            <br>
+            <p style="font-size: 20px; color: white" th:text="${foundCar.get().getCarId()}"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12" style="text-align: center">
+            <table>
+                <thead class="thead-dark">
+                <tr style="background-color: darkred">
+                    <th scope="col">Brand</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Color</th>
+                </tr>
+                </thead>
+                <tr th:object="${foundCar}">
+                    <td th:text="${foundCar.get().getBrand()}">Brand</td>
+                    <td th:text="${foundCar.get().getModel()}">Model</td>
+                    <td th:text="${foundCar.get().getColor()}">Colour</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col" style="text-align: center">
+            <br><br>
+            <a href="/cars-web" class="btn btn-primary custom-btn" role="button" aria-pressed="true">Click here to go
+                back</a>
+        </div>
+    </div>
+</div>
 
-        <th>Brand</th>
-        <th>Model</th>
-        <th>Color</th>
-
-    </tr>
-
-    <tr th:object="${foundCar}">
-        You've found Car by Id: <p th:text="${foundCar.get().getCarId()}"></p>
-        <td th:text="${foundCar.get().getBrand()}">Brand</td>
-        <td th:text="${foundCar.get().getModel()}">Model</td>
-        <td th:text="${foundCar.get().getColor()}">Colour</td>
-    </tr>
-</table>
-<strong><a href="/cars">Click here to go back</a></strong>
 </body>
 </html>
