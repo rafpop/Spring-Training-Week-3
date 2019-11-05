@@ -6,6 +6,8 @@ implemented RESTful architectural style with HATEOAS, Swagger, possibility to pr
 Week 4:
 Implemented CarGui methods with use HTML, CSS, Bootstrap 4 and Thymeleaf in order to make good graphical user interface for my web-app
 
+Web application has been deployed on Heroku - https://car-web-app-raf.herokuapp.com/cars-web
+
 --------------------------
 Homework content below
 
